@@ -1,27 +1,64 @@
 # grid-radio-control
-
-Code to use the Raspberry Pi as a reconfigurable antenna and RF swith controller, the OS installed is 2019-04-08-raspbian-stretch-full:
+## NOTE: raspberrypi04 has damagaed pins 17/27 and it uses 23/24. This was done manually
+Code to use the Raspberry Pi as a reconfigurable antenna and RF swith controller, the OS installed is 2019-04-08-raspbian-stretch-full.
 
 This code can be used without having to physically ssh into the Raspberry pi, an example of this would be the following code (sends socket command to socket port *PORT* and code *CODE* to that port):
 
 `sshpass -p kapilrocks ssh -oStrictHostKeyChecking=no  -X pi@raspberrypi1 "python /home/pi/grid-antenna-control/python/client_cli.py localhost *PORT* *CODE*" > /dev/null 2>&1 &`
 
-## How to use the Raspberry Pi's with `rpi_control.sh`
+## `rpi_control.sh`
 
-USAGE: `./rpi_test.sh [-a 1] [-r <raspberryXX>] -p <808Y> -m <0-5>`
+This automates the control of raspberry pis:
 
-      -l | -list : list all available RPis
-      -r | --rpi : rx grid node
-      -p | --port : port [8080 - RALA, 8081 - RFSwitch]
-      -m | --mode : mode [0-5 for RALA, 1-4 for RFswitch]
-      -a | --all : if this is given, the selected mode will 
-                     be sent to the selected port of all RPis
-      -h | --help : to display this help
+      ./rpi_test.sh [-a] [-r <raspberryXX>] -p <808Y> -m <0-5>
 
-      HINT: Either control one Raspberry pi at a time or all of them.
-      If configuring all, make sure no one else is running a experiment
+        -l | -list : list all available RPis
+        -r | --rpi : rx grid node
+        -p | --port : port [8080 - RALA, 8081 - RFSwitch]
+        -m | --mode : mode [0-5 for RALA, 1-4 for RFswitch]
+        -a | --all : if this is given, the selected mode will
+                       be sent to the selected port of all RPis
+        -h | --help : to display this help
 
+        HINT: Either control one Raspberry pi at a time or all of them.
+        If configuring all, make sure no one else is running a experiment
 
+examples:
+
+      # reset all RPis to use the conventional antennas
+      ./rpi_control.sh -a --port 8081 --mode 2
+
+      # set RPi 1 to use RALA in directional mode 2
+      ./rpi_control.sh -r raspberrypi01 -p 8081 -m 1  # Set Rfswitch to use RALA as desired antenna
+      ./rpi_control.sh -r raspberrypi01 -p 8080 -m 2  # Set RALA to mode 2
+
+#### How to use this in python
+
+The following would toggle automatically the states of the antenna, could be use concurrently with dragon radio or integrated on the code itself:
+
+      """ This code randomly selects the RALA state"""
+      import os
+      import random
+      from time import sleep
+
+      rpi = "raspberrypi01"
+      interval = 0.5 # Amount of seconds to sleep
+
+      myCmd = './rpi_control.sh --rpi '+rpi+' --port 8081 --mode 1' # Select RALA on the RFSwitch
+      os.system(myCmd)
+
+      # Randomly change state for RALA (0 - omni, 1-4 directional)
+      while True:
+          mode = random.randint(0,4) # Random between 0 and 4 both included
+
+          # Send the command
+          myCmd = './rpi_control.sh --rpi '+rpi+' --port 8080 --mode '+str(mode)
+          os.system(myCmd)
+
+          # Wait interval amount of seconds
+          sleep(interval)
+
+      
 ## Server side
 
 * `rala_control.cc`: This file is the Alford Loop controller.

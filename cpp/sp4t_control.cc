@@ -38,8 +38,8 @@ char state[1] = {'0'};     // Initilize with RF1 port enabled
 int sPin[4] = {17, 27}; // Pins A and B for RFSwitch
 short code[4][2] = {
 	{0, 0}, // RF 1
-	{0, 1},	// RF 2
-	{1, 0}, // RF 3
+	{1, 0},	// RF 2
+	{0, 1}, // RF 3
 	{1, 1}, // RF 4
 };
 

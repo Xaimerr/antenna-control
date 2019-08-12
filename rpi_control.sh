@@ -28,7 +28,7 @@ usage()
 {
 	echo "INVALID ARGUMENTS..."
     echo ""
-    echo "USAGE: ./rpi_test.sh [-a 1] [-r <raspberryXX>] -p <808Y> -m <0-5>"
+    echo "USAGE: ./rpi_test.sh [-a] [-r <raspberryXX>] -p <808Y> -m <0-5>"
     echo ""
     echo "-l | -list : list all available RPis"
     echo "-r | --rpi : rx grid node"
@@ -40,6 +40,15 @@ usage()
     echo ""
     echo "HINT: Either control one Raspberry pi at a time or all of them."
     echo "If configuring all, make sure no one else is running a experiment"
+    echo ""
+    echo "Examples:"
+    echo ""
+    echo "  # reset all RPis to use the conventional antennas"
+    echo "  ./rpi_control.sh -a --port 8081 --mode 2"
+    echo ""
+    echo "  # set RPi 1 to use RALA in directional mode 2"
+    echo "  ./rpi_control.sh -r raspberrypi01 -p 8081 -m 1  # Set Rfswitch to use RALA as desired antenna"
+    echo "  ./rpi_control.sh -r raspberrypi01 -p 8080 -m 2  # Set RALA to mode 2"
     echo ""
 }
 
