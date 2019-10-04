@@ -1,5 +1,4 @@
 # grid-radio-control
-## NOTE: raspberrypi04 has damagaed pins 17/27 and it uses 23/24. This was done manually
 Code to use the Raspberry Pi as a reconfigurable antenna and RF swith controller, the OS installed is 2019-04-08-raspbian-stretch-full.
 
 This code can be used without having to physically ssh into the Raspberry pi, an example of this would be the following code (sends socket command to socket port *PORT* and code *CODE* to that port):
