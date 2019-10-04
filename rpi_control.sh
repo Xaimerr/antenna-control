@@ -30,7 +30,8 @@ usage()
     echo ""
     echo "USAGE: ./rpi_test.sh [-a] [-r <raspberryXX>] -p <808Y> -m <0-5>"
     echo ""
-    echo "-l | -list : list all available RPis"
+    echo "-l | --list : list all available RPis"
+    echo "-s | -states : list the modes of all RPis"
     echo "-r | --rpi : rx grid node"
     echo "-p | --port : port [8080 - RALA, 8081 - RFSwitch]"
     echo "-m | --mode : mode [0-5 for RALA, 1-4 for RFswitch]"
@@ -55,10 +56,14 @@ usage()
 # While there is an input argument check to see which case it is
 while (( $# )); do
   case $1 in
-		-l|--list) # List all modes
-			list_all=1
-			break
-			;;
+	-l|--list) # List all modes
+		list_all=1
+		break
+		;;
+	-s|--states) # List all states
+		states=1
+		break
+		;;
         -r|--rpi) # Raspberry to be configured
 			rpis+=($2)
 			shift 2
@@ -98,6 +103,22 @@ then
 	for name in $(gridcli -l | sed 1,3d)
 	do
 		echo "raspberrypi${name//[!0-9]/}"
+	done
+	exit 0
+fi
+
+# If the user wants to see the modes for all raspberry's
+if [ $states -eq 1 ]
+then 
+	echo ""
+	echo "The Raspberry Pis are configured as follows:"
+	echo "================================================"
+	echo ""
+	for i in $(seq 0 $(( ${#RASPBERRY_LIST[@]}-1 )))
+	do
+		echo ""
+		echo "${RASPBERRY_LIST[i]}"
+		sshpass -p "$PASSWD" ssh -oStrictHostKeyChecking=no pi@${RASPBERRY_LIST[i]}".local" "python /home/pi/grid-antenna-control/python/get_state.py"
 	done
 	exit 0
 fi
@@ -158,7 +179,7 @@ echo ""
 echo "Starting configuration..."
 for i in $(seq 0 $(( ${#rpis[@]}-1 )))
 do
-		echo "Configuring "${rpis[i]}" PORT "${ports[$i]}" to MODE "${modes[$i]}
+	echo "Configuring "${rpis[i]}" PORT "${ports[$i]}" to MODE "${modes[$i]}
 	sshpass -p "$PASSWD" ssh -oStrictHostKeyChecking=no pi@${rpis[i]}".local" "python /home/pi/grid-antenna-control/python/client_cli.py localhost "${ports[$i]}" "${modes[$i]} > /dev/null 2>&1
 done
 echo "DONE"
