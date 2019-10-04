@@ -183,7 +183,7 @@ Some errors may occur, the most common ones are:
 
 # TODO
 
-* Script to mass handle all Raspberry pi's
+* ~~Script to mass handle all Raspberry pi's~~
 
 ## PINOUT FOR REFERENCE
 
