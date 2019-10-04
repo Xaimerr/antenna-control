@@ -3,15 +3,16 @@ Code to use the Raspberry Pi as a reconfigurable antenna and RF swith controller
 
 This code can be used without having to physically ssh into the Raspberry pi, an example of this would be the following code (sends socket command to socket port *PORT* and code *CODE* to that port):
 
-`sshpass -p ********* ssh -oStrictHostKeyChecking=no  -X pi@raspberrypi1 "python /home/pi/grid-antenna-control/python/client_cli.py localhost *PORT* *CODE*" > /dev/null 2>&1 &`
+`sshpass -p ********* ssh -oStrictHostKeyChecking=no  -X pi@raspberrypi01 "python /home/pi/grid-antenna-control/python/client_cli.py localhost *PORT* *CODE*" > /dev/null 2>&1 &`
 
 ## `rpi_control.sh`
 
 This automates the control of raspberry pis:
 
-      ./rpi_test.sh [-a] [-r <raspberryXX>] -p <808Y> -m <0-5>
+      ./rpi_control.sh [-a] [-r <raspberryXX>] -p <808Y> -m <0-5>
 
-        -l | -list : list all available RPis
+        -l | --list : list all available RPis
+        -s | --state : list RALA and RFswitch state of all RPis
         -r | --rpi : rx grid node
         -p | --port : port [8080 - RALA, 8081 - RFSwitch]
         -m | --mode : mode [0-5 for RALA, 1-4 for RFswitch]
