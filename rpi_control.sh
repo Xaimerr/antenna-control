@@ -2,7 +2,7 @@
 config_all=0 #
 list_all=0
 
-PASSWD=kapilrocks
+PASSWD=***********
 RASPBERRY_LIST=(
     "raspberrypi01"
     "raspberrypi03"
