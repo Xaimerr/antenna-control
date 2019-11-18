@@ -59,6 +59,10 @@ while (( $# )); do
 			list_all=1
 			break
 			;;
+		-s|--states) # List all states
+			states=1
+			break
+			;;
         -r|--rpi) # Raspberry to be configured
 			rpis+=($2)
 			shift 2
@@ -98,6 +102,20 @@ then
 	for name in $(gridcli -l | sed 1,3d)
 	do
 		echo "raspberrypi${name//[!0-9]/}"
+	done
+	exit 0
+fi
+
+# If the user wants to see the modes for all raspberry's
+if [ $list_all -eq 1 ]
+then 
+	echo ""
+	echo "The Raspberry Pis are configured as follows:"
+	echo "================================================"
+	echo ""
+	for i in $(seq 0 $(( ${#rpis[@]}-1 )))
+	do
+		sshpass -p "$PASSWD" ssh -oStrictHostKeyChecking=no pi@${rpis[i]}".local" "python /home/pi/grid-antenna-control/python/get_state.py"
 	done
 	exit 0
 fi
@@ -158,7 +176,7 @@ echo ""
 echo "Starting configuration..."
 for i in $(seq 0 $(( ${#rpis[@]}-1 )))
 do
-		echo "Configuring "${rpis[i]}" PORT "${ports[$i]}" to MODE "${modes[$i]}
+	echo "Configuring "${rpis[i]}" PORT "${ports[$i]}" to MODE "${modes[$i]}
 	sshpass -p "$PASSWD" ssh -oStrictHostKeyChecking=no pi@${rpis[i]}".local" "python /home/pi/grid-antenna-control/python/client_cli.py localhost "${ports[$i]}" "${modes[$i]} > /dev/null 2>&1
 done
 echo "DONE"
