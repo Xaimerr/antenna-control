@@ -2,7 +2,7 @@
 config_all=0 #
 list_all=0
 
-PASSWD=kapilrocks
+PASSWD=***********
 RASPBERRY_LIST=(
     "raspberrypi01"
     "raspberrypi03"
@@ -30,7 +30,8 @@ usage()
     echo ""
     echo "USAGE: ./rpi_test.sh [-a] [-r <raspberryXX>] -p <808Y> -m <0-5>"
     echo ""
-    echo "-l | -list : list all available RPis"
+    echo "-l | --list : list all available RPis"
+    echo "-s | -states : list the modes of all RPis"
     echo "-r | --rpi : rx grid node"
     echo "-p | --port : port [8080 - RALA, 8081 - RFSwitch]"
     echo "-m | --mode : mode [0-5 for RALA, 1-4 for RFswitch]"
@@ -55,6 +56,7 @@ usage()
 # While there is an input argument check to see which case it is
 while (( $# )); do
   case $1 in
+<<<<<<< HEAD
 		-l|--list) # List all modes
 			list_all=1
 			break
@@ -63,6 +65,16 @@ while (( $# )); do
 			states=1
 			break
 			;;
+=======
+	-l|--list) # List all modes
+		list_all=1
+		break
+		;;
+	-s|--states) # List all states
+		states=1
+		break
+		;;
+>>>>>>> 81c67f66edcb21af56342f1b74ec66d083da90c6
         -r|--rpi) # Raspberry to be configured
 			rpis+=($2)
 			shift 2
@@ -107,15 +119,27 @@ then
 fi
 
 # If the user wants to see the modes for all raspberry's
+<<<<<<< HEAD
 if [ $list_all -eq 1 ]
+=======
+if [ $states -eq 1 ]
+>>>>>>> 81c67f66edcb21af56342f1b74ec66d083da90c6
 then 
 	echo ""
 	echo "The Raspberry Pis are configured as follows:"
 	echo "================================================"
 	echo ""
+<<<<<<< HEAD
 	for i in $(seq 0 $(( ${#rpis[@]}-1 )))
 	do
 		sshpass -p "$PASSWD" ssh -oStrictHostKeyChecking=no pi@${rpis[i]}".local" "python /home/pi/grid-antenna-control/python/get_state.py"
+=======
+	for i in $(seq 0 $(( ${#RASPBERRY_LIST[@]}-1 )))
+	do
+		echo ""
+		echo "${RASPBERRY_LIST[i]}"
+		sshpass -p "$PASSWD" ssh -oStrictHostKeyChecking=no pi@${RASPBERRY_LIST[i]}".local" "python /home/pi/grid-antenna-control/python/get_state.py"
+>>>>>>> 81c67f66edcb21af56342f1b74ec66d083da90c6
 	done
 	exit 0
 fi
