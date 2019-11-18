@@ -1,6 +1,8 @@
 #!/usr/bin/python
 """ This python code reads the GPIO state of any RPi and based on that 
-returns the state of the antenna and the RFswitch"""
+returns the state of the antenna and the RFswitch
+
+Xaime Rivas Rey 9/30/19"""
 import wiringpi
 wiringpi.wiringPiSetupGpio() # Set GPIO numbering scheme
 
@@ -25,9 +27,11 @@ gpio = [wiringpi.digitalRead(pin) for pin in rala_pins]
 for i in range(len(rala_states)):
 	if rala_states[i] == gpio:
 		print("RALA state: "+str(i))
+		break
 
 # Get state for RFSwitch
 gpio = [wiringpi.digitalRead(pin) for pin in rfswitch_pins]
 for i in range(len(rfswitch_states)):
 	if rfswitch_states[i] == gpio:
 		print("RFSwitch state: "+str(i+1))
+		break
